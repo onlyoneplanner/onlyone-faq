@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1100" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<title>온리원 2.0 FAQ</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+:root{
+  --ink:#171A21; --ink-2:#4A5160; --ink-3:#8A91A0;
+  --line:#E3E6EC; --line-2:#CDD2DC;
+  --bg:#F6F7F9; --card:#FFFFFF;
+  --accent:#1F4E79; --accent-bg:#EAF1F8;
+  --warn-bg:#FDF3DE; --warn-ink:#7A5205;
+  --ok-bg:#E6F2EA; --ok-ink:#1E6640;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+
+/* header */
+header{background:var(--card);border-bottom:1px solid var(--line)}
+.head-in{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.brand h1{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.brand p{font-size:13px;color:var(--ink-3);margin-top:2px}
+.btn{
+  font:inherit;font-size:14px;font-weight:500;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--card);color:var(--ink);
+  height:38px;padding:0 16px;border-radius:var(--radius);
+  transition:background .12s,border-color .12s;
+}
+.btn:hover{background:var(--bg);border-color:var(--ink-3)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:#173C5E;border-color:#173C5E}
+.btn:focus-visible,input:focus-visible,.cat:focus-visible,.qbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* search */
+.searchbar{padding:26px 0 0}
+.sfield{position:relative}
+.sfield input{
+  width:100%;height:52px;font:inherit;font-size:16px;
+  padding:0 46px 0 46px;border:1px solid var(--line-2);border-radius:var(--radius);
+  background:var(--card);color:var(--ink);
+}
+.sfield input::placeholder{color:var(--ink-3)}
+.sfield input:focus{border-color:var(--accent)}
+.sicon{position:absolute;left:16px;top:15px;width:22px;height:22px;stroke:var(--ink-3);fill:none;stroke-width:2}
+.sclear{position:absolute;right:10px;top:11px;width:30px;height:30px;border:none;background:none;cursor:pointer;color:var(--ink-3);font-size:18px;border-radius:6px;display:none}
+.sclear:hover{background:var(--bg);color:var(--ink)}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px 22px;font-size:13px;color:var(--ink-3);min-height:34px}
+.meta button{border:none;background:none;font:inherit;font-size:13px;color:var(--ink-3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.meta button:hover{color:var(--accent)}
+
+/* layout */
+.cols{display:grid;grid-template-columns:172px minmax(0,1fr);gap:28px;align-items:start;padding-bottom:64px}
+nav{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px}
+.cat{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font:inherit;font-size:14px;cursor:pointer;text-align:left;
+  border:none;background:none;color:var(--ink-2);
+  padding:9px 12px;border-radius:8px;width:100%;
+}
+.cat:hover{background:#EDEFF3}
+.cat .n{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.cat[aria-current="true"]{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.cat[aria-current="true"] .n{color:var(--accent)}
+
+/* list */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;transition:border-color .12s}
+.item:hover{border-color:var(--line-2)}
+.item.open{border-color:var(--ink-3)}
+.qbtn{
+  display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;
+  border:none;background:none;font:inherit;cursor:pointer;color:inherit;
+  padding:16px 18px;border-radius:12px;
+}
+.tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:5px;font-weight:500;letter-spacing:.01em}
+.tag.cat{background:#EEF0F4;color:var(--ink-2)}
+.tag.pin{background:var(--warn-bg);color:var(--warn-ink)}
+.tag.new{background:var(--ok-bg);color:var(--ok-ink)}
+.qtext{font-size:15.5px;font-weight:600;line-height:1.5;letter-spacing:-.005em}
+.qtext mark{background:#FFF1A8;color:inherit;padding:0 1px;border-radius:2px}
+.chev{flex:none;width:18px;height:18px;stroke:var(--ink-3);fill:none;stroke-width:2;margin-top:4px;transition:transform .15s}
+.item.open .chev{transform:rotate(180deg)}
+.ans{padding:0 18px 18px 18px;border-top:1px solid var(--line);margin:0 18px;padding-left:0;padding-right:0}
+.ans-in{padding-top:14px;font-size:14.5px;color:var(--ink-2);line-height:1.75}
+.ans-in p{margin:8px 0}
+.ans-in p:first-child{margin-top:0}
+.ans-in ul{margin:8px 0;padding-left:20px}
+.ans-in li{margin:3px 0}
+.ans-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.link{
+  display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;
+  text-decoration:none;color:var(--accent);background:var(--accent-bg);
+  padding:7px 12px;border-radius:8px;
+}
+.link:hover{background:#DCE7F2}
+.link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.date{font-size:12px;color:var(--ink-3);margin-left:auto}
+.copy{border:none;background:none;font:inherit;font-size:12px;color:var(--ink-3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.copy:hover{color:var(--accent)}
+
+/* states */
+.state{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:44px 24px;text-align:center}
+.state h2{font-size:15px;font-weight:600;margin-bottom:6px}
+.state p{font-size:14px;color:var(--ink-3)}
+.skel{background:var(--card);border:1px solid var(--line);border-radius:12px;height:70px;margin-bottom:10px;position:relative;overflow:hidden}
+.skel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#F0F2F5,transparent);animation:sh 1.2s infinite}
+@keyframes sh{to{transform:translateX(100%)}}
+
+/* ask box */
+.ask{
+  margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.ask h2{font-size:15px;font-weight:600}
+.ask p{font-size:13.5px;color:var(--ink-3);margin-top:3px}
+footer{border-top:1px solid var(--line);padding:20px 0 40px;font-size:12px;color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-in">
+    <div class="brand">
+      <h1>온리원 2.0 FAQ</h1>
+      <p>플래너 · 파트너 업무 참고용</p>
+    </div>
+    <button class="btn btn-primary" id="askTop">문의하기</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="searchbar">
+    <div class="sfield">
+      <svg class="sicon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="궁금한 내용을 검색하세요.  예: 태블릿, 해지, 로그인" autocomplete="off" />
+      <button class="sclear" id="clear" aria-label="검색어 지우기">×</button>
+    </div>
+    <div class="meta">
+      <span id="count"></span>
+      <button id="refresh">최신 내용 불러오기</button>
+    </div>
+  </div>
+
+  <div class="cols">
+    <nav id="nav" aria-label="카테고리"></nav>
+    <main>
+      <div class="list" id="list">
+        <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+      </div>
+      <div class="ask" id="ask">
+        <div>
+          <h2>찾는 답이 없나요?</h2>
+          <p>문의를 남기면 확인 후 개별 회신드립니다.</p>
+        </div>
+        <button class="btn" id="askBtn">질문 남기기</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer><div class="wrap">온리원 CX Core · CX기획 Cell</div></footer>
+
+<script>
+/* ===== 설정 ===== */
+const CONFIG = {
+  SHEET_CSV_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYmnNbt_TigNN1DrhbJgsl6XOYz7UMYkiJyWKaNlw2geY5waLEOsos6m0XqIP2CQ/pub?gid=1276241340&single=true&output=csv",
+  FORM_URL: "",
+  CATEGORIES: ["상품·가격","기기·설치","앱·로그인","학습 운영","계약·해지","기타"],
+  NEW_DAYS: 14
+};
+
+/* ===== CSV 파서 ===== */
+function parseCSV(text){
+  const rows=[]; let row=[], cur="", q=false;
+  text=text.replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){
+      if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=ch;
+    }else{
+      if(ch==='"') q=true;
+      else if(ch===','){ row.push(cur); cur=""; }
+      else if(ch==='\n'){ row.push(cur); rows.push(row); row=[]; cur=""; }
+      else cur+=ch;
+    }
+  }
+  if(cur!==""||row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(r=>r.some(c=>c.trim()!==""));
+}
+
+/* ===== 상태 ===== */
+let DATA=[], cat="전체", open=new Set(), loaded=false;
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+async function load(force){
+  try{
+    const url=CONFIG.SHEET_CSV_URL+(force?"&_t="+Date.now():"");
+    const res=await fetch(url,{cache:force?"reload":"default"});
+    if(!res.ok) throw new Error(res.status);
+    const rows=parseCSV(await res.text());
+    const head=rows.shift().map(h=>h.trim());
+    const ix=n=>head.indexOf(n);
+    const C=ix("카테고리"),Q=ix("질문"),A=ix("답변"),D=ix("수정일"),K=ix("검색어"),P=ix("고정"),V=ix("공개"),L=ix("관련링크");
+    DATA=rows.map(r=>({
+      c:(r[C]||"기타").trim(), q:(r[Q]||"").trim(), a:(r[A]||"").trim(),
+      d:(r[D]||"").trim(), k:(r[K]||"").trim(),
+      pin:(r[P]||"").trim().toUpperCase()==="Y"?1:0,
+      hide:(r[V]||"").trim().toUpperCase()==="N",
+      l:(r[L]||"").trim()
+    })).filter(x=>x.q && !x.hide);
+    loaded=true; render();
+  }catch(e){
+    document.getElementById("list").innerHTML=
+      '<div class="state"><h2>내용을 불러오지 못했습니다</h2><p>시트의 웹 게시 설정을 확인한 뒤 페이지를 새로고침해 주세요.</p></div>';
+    document.getElementById("nav").innerHTML="";
+    document.getElementById("count").textContent="";
+  }
+}
+
+function fmtAnswer(a){
+  return a.split(/\n\s*\n/).map(block=>{
+    const lines=block.split("\n").filter(l=>l.trim()!=="");
+    if(lines.length && lines.every(l=>/^\s*[-·•]/.test(l)))
+      return "<ul>"+lines.map(l=>"<li>"+esc(l.replace(/^\s*[-·•]\s*/,""))+"</li>").join("")+"</ul>";
+    return "<p>"+lines.map(esc).join("<br>")+"</p>";
+  }).join("");
+}
+function fmtLinks(raw){
+  if(!raw) return "";
+  return raw.split(",").map(s=>s.trim()).filter(Boolean).map(part=>{
+    let name="관련 자료 보기", url=part;
+    const bar=part.indexOf("|");
+    if(bar>-1){ name=part.slice(0,bar).trim(); url=part.slice(bar+1).trim(); }
+    if(!/^https?:\/\//.test(url)) return "";
+    return '<a class="link" href="'+esc(url)+'" target="_blank" rel="noopener">'+esc(name)+
+      '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>';
+  }).join("");
+}
+function isNew(d){
+  const t=Date.parse(d); if(isNaN(t)) return false;
+  return (Date.now()-t)/864e5 <= CONFIG.NEW_DAYS;
+}
+function terms(){ return (document.getElementById("q").value||"").trim().toLowerCase().split(/\s+/).filter(Boolean); }
+function hit(x,ts){ const blob=(x.q+" "+x.k+" "+x.a).toLowerCase(); return ts.every(t=>blob.includes(t)); }
+function hl(s,ts){
+  let out=esc(s);
+  ts.forEach(t=>{
+    if(!t) return;
+    const re=new RegExp("("+t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+    out=out.replace(re,"<mark>$1</mark>");
+  });
+  return out;
+}
+
+function render(){
+  if(!loaded) return;
+  const ts=terms();
+  document.getElementById("clear").style.display=ts.length?"block":"none";
+  const all=DATA.filter(x=>hit(x,ts));
+  const cats=[{n:"전체",v:all.length}].concat(CONFIG.CATEGORIES.map(c=>({n:c,v:all.filter(x=>x.c===c).length})));
+  if(cat!=="전체" && !CONFIG.CATEGORIES.includes(cat)) cat="전체";
+  document.getElementById("nav").innerHTML=cats.map(r=>
+    '<button class="cat" aria-current="'+(r.n===cat)+'" onclick="pick(\''+r.n.replace(/'/g,"\\'")+'\')"><span>'+esc(r.n)+'</span><span class="n">'+r.v+'</span></button>').join("");
+
+  let rows=cat==="전체"?all:all.filter(x=>x.c===cat);
+  rows.sort((a,b)=>b.pin-a.pin || String(b.d).localeCompare(String(a.d)));
+  document.getElementById("count").textContent = ts.length
+    ? "검색 결과 "+all.length+"건"
+    : "전체 "+DATA.length+"건";
+
+  document.getElementById("list").innerHTML = rows.length ? rows.map(x=>{
+    const key=btoa(unescape(encodeURIComponent(x.q))).slice(0,24);
+    const on=open.has(x.q);
+    const links=fmtLinks(x.l);
+    return '<div class="item'+(on?" open":"")+'" id="i_'+key+'">'
+      +'<button class="qbtn" aria-expanded="'+on+'" onclick="tog(this.dataset.q)" data-q="'+esc(x.q)+'">'
+      +'<span style="flex:1;min-width:0">'
+      +'<span class="tags">'
+      +(x.pin?'<span class="tag pin">자주 묻는 질문</span>':'')
+      +'<span class="tag cat">'+esc(x.c)+'</span>'
+      +(isNew(x.d)?'<span class="tag new">최근 업데이트</span>':'')
+      +'</span>'
+      +'<span class="qtext">'+hl(x.q,ts)+'</span></span>'
+      +'<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>'
+      +(on?'<div class="ans"><div class="ans-in">'+fmtAnswer(x.a)
+        +'<div class="ans-foot">'+(links?'<div class="links">'+links+'</div>':'')
+        +'<span class="date">'+(x.d?'수정일 '+esc(x.d):'')+'</span></div>'
+        +'</div></div>':'')
+      +'</div>';
+  }).join("") : '<div class="state"><h2>검색 결과가 없습니다</h2><p>다른 단어로 검색하거나 아래에서 문의를 남겨주세요.</p></div>';
+}
+
+function pick(c){ cat=c; render(); }
+function tog(q){ open.has(q)?open.delete(q):open.add(q); render(); }
+function goForm(){
+  if(CONFIG.FORM_URL) window.open(CONFIG.FORM_URL,"_blank","noopener");
+  else alert("문의 폼 주소가 아직 등록되지 않았습니다.\n담당자에게 문의해 주세요.");
+}
+
+document.getElementById("q").addEventListener("input",render);
+document.getElementById("clear").addEventListener("click",()=>{document.getElementById("q").value="";render();document.getElementById("q").focus();});
+document.getElementById("refresh").addEventListener("click",()=>{document.getElementById("list").innerHTML='<div class="skel"></div><div class="skel"></div>';loaded=false;load(true);});
+document.getElementById("askBtn").addEventListener("click",goForm);
+document.getElementById("askTop").addEventListener("click",goForm);
+document.addEventListener("keydown",e=>{
+  if((e.key==="/"||((e.metaKey||e.ctrlKey)&&e.key==="k")) && document.activeElement.id!=="q"){
+    e.preventDefault(); document.getElementById("q").focus();
+  }
+});
+load(false);
+</script>
+</body>
+</html>
