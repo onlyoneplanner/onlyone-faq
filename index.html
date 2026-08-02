@@ -54,9 +54,7 @@ header{background:var(--card);border-bottom:1px solid var(--line)}
 .sicon{position:absolute;left:16px;top:15px;width:22px;height:22px;stroke:var(--ink-3);fill:none;stroke-width:2}
 .sclear{position:absolute;right:10px;top:11px;width:30px;height:30px;border:none;background:none;cursor:pointer;color:var(--ink-3);font-size:18px;border-radius:6px;display:none}
 .sclear:hover{background:var(--bg);color:var(--ink)}
-.meta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 2px 22px;font-size:13px;color:var(--ink-3);min-height:34px}
-.meta button{border:none;background:none;font:inherit;font-size:13px;color:var(--ink-3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.meta button:hover{color:var(--accent)}
+.meta{display:flex;align-items:center;padding:10px 2px 18px;font-size:13px;color:var(--ink-3);min-height:30px}
 
 /* layout */
 .cols{display:grid;grid-template-columns:172px minmax(0,1fr);gap:28px;align-items:start;padding-bottom:64px}
@@ -72,17 +70,30 @@ nav{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px}
 .cat[aria-current="true"]{background:var(--accent-bg);color:var(--accent);font-weight:600}
 .cat[aria-current="true"] .n{color:var(--accent)}
 
+/* filter chips */
+.chips{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.chip{
+  font:inherit;font-size:13px;cursor:pointer;white-space:nowrap;
+  border:1px solid var(--line-2);background:var(--card);color:var(--ink-2);
+  padding:6px 13px;border-radius:999px;transition:background .12s,border-color .12s,color .12s;
+}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.pinonly[aria-pressed="true"]{background:var(--warn-ink);border-color:var(--warn-ink);color:#fff}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chipdiv{width:1px;height:20px;background:var(--line);margin:0 3px}
+
 /* list */
-.list{display:flex;flex-direction:column;gap:10px}
+.list{display:flex;flex-direction:column;gap:8px}
 .item{background:var(--card);border:1px solid var(--line);border-radius:12px;transition:border-color .12s}
 .item:hover{border-color:var(--line-2)}
 .item.open{border-color:var(--ink-3)}
 .qbtn{
   display:flex;gap:14px;align-items:flex-start;width:100%;text-align:left;
   border:none;background:none;font:inherit;cursor:pointer;color:inherit;
-  padding:16px 18px;border-radius:12px;
+  padding:14px 18px;border-radius:12px;
 }
-.tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:7px;width:100%}
+.tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;width:100%}
 .tag{display:inline-flex;align-items:center;flex:none;width:auto;white-space:nowrap;font-size:11.5px;padding:2px 8px;border-radius:5px;font-weight:500;letter-spacing:.01em}
 .tag.tcat{background:#EEF0F4;color:var(--ink-2)}
 .tag.prod{background:#E4EDF7;color:#1F4E79}
@@ -151,13 +162,13 @@ footer{border-top:1px solid var(--line);padding:20px 0 40px;font-size:12px;color
     </div>
     <div class="meta">
       <span id="count"></span>
-      <button id="refresh">최신 내용 불러오기</button>
     </div>
   </div>
 
   <div class="cols">
     <nav id="nav" aria-label="카테고리"></nav>
     <main>
+      <div class="chips" id="chips"></div>
       <div class="list" id="list">
         <div class="skel"></div><div class="skel"></div><div class="skel"></div>
       </div>
@@ -204,13 +215,13 @@ function parseCSV(text){
 }
 
 /* ===== 상태 ===== */
-let DATA=[], cat="전체", open=new Set(), loaded=false;
+let DATA=[], cat="전체", prod="전체", pinOnly=false, open=new Set(), loaded=false;
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 
-async function load(force){
+async function load(){
   try{
-    const url=CONFIG.SHEET_CSV_URL+(force?"&_t="+Date.now():"");
-    const res=await fetch(url,{cache:force?"reload":"default"});
+    const url=CONFIG.SHEET_CSV_URL+"&_t="+Date.now();
+    const res=await fetch(url,{cache:"no-store"});
     if(!res.ok) throw new Error(res.status);
     const rows=parseCSV(await res.text());
     const head=rows.shift().map(h=>h.trim());
@@ -272,7 +283,24 @@ function render(){
   if(!loaded) return;
   const ts=terms();
   document.getElementById("clear").style.display=ts.length?"block":"none";
-  const all=DATA.filter(x=>hit(x,ts));
+
+  const newRatio = DATA.length ? DATA.filter(x=>isNew(x.d)).length/DATA.length : 0;
+  const showNew = newRatio < 0.3;
+
+  const prods=[...new Set(DATA.map(x=>x.s).filter(Boolean))];
+  if(prod!=="전체" && !prods.includes(prod)) prod="전체";
+  const chip=(label,on,handler,warn)=>
+    '<button class="chip'+(warn?" pinonly":"")+'" aria-pressed="'+on+'" onclick="'+handler+'">'+esc(label)+'</button>';
+  let chipHTML="";
+  if(prods.length){
+    chipHTML=chip("전체",prod==="전체","setProd(\'전체\')")
+      +prods.map(p=>chip(p,prod===p,"setProd('"+p.replace(/'/g,"\\'")+"')")).join("")
+      +'<span class="chipdiv"></span>';
+  }
+  chipHTML+=chip("자주 묻는 질문만",pinOnly,"togPin()",true);
+  document.getElementById("chips").innerHTML=chipHTML;
+
+  const all=DATA.filter(x=>hit(x,ts) && (prod==="전체"||x.s===prod) && (!pinOnly||x.pin));
   const cats=[{n:"전체",v:all.length}].concat(CONFIG.CATEGORIES.map(c=>({n:c,v:all.filter(x=>x.c===c).length})));
   if(cat!=="전체" && !CONFIG.CATEGORIES.includes(cat)) cat="전체";
   document.getElementById("nav").innerHTML=cats.map(r=>
@@ -280,8 +308,9 @@ function render(){
 
   let rows=cat==="전체"?all:all.filter(x=>x.c===cat);
   rows.sort((a,b)=>b.pin-a.pin || String(b.d).localeCompare(String(a.d)));
-  document.getElementById("count").textContent = ts.length
-    ? "검색 결과 "+all.length+"건"
+  const filtered = ts.length || prod!=="전체" || pinOnly;
+  document.getElementById("count").textContent = filtered
+    ? "조건에 맞는 질문 "+all.length+"건"
     : "전체 "+DATA.length+"건";
 
   document.getElementById("list").innerHTML = rows.length ? rows.map(x=>{
@@ -295,7 +324,7 @@ function render(){
       +(x.pin?'<span class="tag pin">자주 묻는 질문</span>':'')
       +(x.s?'<span class="tag prod">'+esc(x.s)+'</span>':'')
       +'<span class="tag tcat">'+esc(x.c)+'</span>'
-      +(isNew(x.d)?'<span class="tag new">최근 업데이트</span>':'')
+      +(showNew&&isNew(x.d)?'<span class="tag new">최근 업데이트</span>':'')
       +'</span>'
       +'<span class="qtext">'+hl(x.q,ts)+'</span></span>'
       +'<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>'
@@ -304,8 +333,11 @@ function render(){
         +'<span class="date">'+(x.d?'수정일 '+esc(x.d):'')+'</span></div>'
         +'</div></div>':'')
       +'</div>';
-  }).join("") : '<div class="state"><h2>검색 결과가 없습니다</h2><p>다른 단어로 검색하거나 아래에서 문의를 남겨주세요.</p></div>';
+  }).join("") : '<div class="state"><h2>조건에 맞는 질문이 없습니다</h2><p>필터를 바꾸거나 아래에서 문의를 남겨주세요.</p></div>';
 }
+
+function setProd(p){ prod=p; render(); }
+function togPin(){ pinOnly=!pinOnly; render(); }
 
 function pick(c){ cat=c; render(); }
 function tog(q){ open.has(q)?open.delete(q):open.add(q); render(); }
@@ -316,7 +348,6 @@ function goForm(){
 
 document.getElementById("q").addEventListener("input",render);
 document.getElementById("clear").addEventListener("click",()=>{document.getElementById("q").value="";render();document.getElementById("q").focus();});
-document.getElementById("refresh").addEventListener("click",()=>{document.getElementById("list").innerHTML='<div class="skel"></div><div class="skel"></div>';loaded=false;load(true);});
 document.getElementById("askBtn").addEventListener("click",goForm);
 document.getElementById("askTop").addEventListener("click",goForm);
 document.addEventListener("keydown",e=>{
@@ -324,7 +355,7 @@ document.addEventListener("keydown",e=>{
     e.preventDefault(); document.getElementById("q").focus();
   }
 });
-load(false);
+load();
 </script>
 </body>
 </html>
