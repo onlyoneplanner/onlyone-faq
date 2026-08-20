@@ -552,7 +552,7 @@ document.getElementById("list").addEventListener("click",e=>{
   const t=e.target.closest("[data-copytext]");
   if(t){
     const x=DATA.find(v=>v.id===t.dataset.copytext);
-    if(x) copy(x.q+"\n\n"+x.a,"답변을 복사했습니다");
+    if(x) copy(x.a,"답변을 복사했습니다");
     return;
   }
   const b=e.target.closest(".qbtn");
